@@ -1,0 +1,39 @@
+<div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-3xl mx-auto">
+        <h2 className="text-2xl font-semibold text-indigo-600 mb-6 text-center">
+            Share Your Testimony
+        </h2>
+        <form method="post" enctype="multipart/form-data" className="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label for="category" className="block text-sm font-medium text-gray-700">
+                    Category
+                </label>
+                {{ form.category }}
+            </div>
+            <div>
+                <label for="testimony" className="block text-sm font-medium text-gray-700">
+                    Your Testimony
+                </label>
+                {{ form.testimony }}
+            </div>
+            <div>
+                <label for="image" className="block text-sm font-medium text-gray-700">
+                    Upload Image (Optional)
+                </label>
+                {{ form.image }}
+            </div>
+            <div>
+                <label for="video" className="block text-sm font-medium text-gray-700">
+                    Video URL (Optional)
+                </label>
+                {{ form.video }}
+            </div>
+            <div className="flex justify-center">
+                <button type="submit" className="px-6 py-3 rounded-full font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-300">
+                    Submit Testimony
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
