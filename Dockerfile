@@ -12,7 +12,7 @@ RUN python manage.py migrate
 
 EXPOSE 8000
 
-CMD [ "python", "manage.py", "runserver" ]
+CMD [ "python", "manage.py", "runserver" ,"8000"]
 
 # docker ps
 # docker build -t clgc_backend .
