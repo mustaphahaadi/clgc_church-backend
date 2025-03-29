@@ -1,7 +1,11 @@
 from django.db import models
 from django.conf import settings
+from user.models import CustomUser
 
 class Profile(models.Model):
+    class Meta:
+        app_label = 'members'
+    
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     visit_date = models.DateField(auto_now_add=True)
     date_of_birth = models.DateField(null=True, blank=True)

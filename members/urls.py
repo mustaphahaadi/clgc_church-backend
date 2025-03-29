@@ -8,8 +8,8 @@ router.register(r'testimonies', views.TestimonyViewSet)
 
 urlpatterns = [
     # Authentication endpoints
-    path('auth/signup/', views.SignupView.as_view(), name='signup'),
-    path('auth/login/', views.LoginView.as_view(), name='login'),
+    # path('auth/signup/', views.SignupView.as_view(), name='signup'),
+    # path('auth/login/', views.LoginView.as_view(), name='login'),
     
     # Profile endpoints
     path('user/complete-profile/', views.ProfileCompletionView.as_view(), name='profile-completion'),

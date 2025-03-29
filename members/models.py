@@ -11,12 +11,12 @@ class Member(models.Model):
         return self.user.username
 
 class Contact(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, default='Anonymous')
     email = models.EmailField(blank=True, null=True)
-    phone = models.CharField(max_length=20)
-    subject = models.CharField(max_length=200)
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    phone = models.CharField(max_length=20, default='Not provided')  # Added default value
+    subject = models.CharField(max_length=100, default='General Inquiry')
+    message = models.TextField(default='')
+    created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
@@ -41,7 +41,7 @@ class Testimony(models.Model):
     testimony = models.TextField()
     image = models.ImageField(upload_to=testimony_image_path, null=True, blank=True)
     video = models.URLField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)  # Changed from auto_now_add to default
     approved = models.BooleanField(default=False)
     
     def __str__(self):
