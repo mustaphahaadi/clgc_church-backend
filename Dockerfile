@@ -4,8 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN apt-get update && apt-get upgrade \
-    && apt-get install gcc python3-dev musl-dev 
+RUN apt-get update && apt-get upgrade -y && apt-get install -y gcc python3-dev musl-dev && rm -rf /var/lib/apt/lists/*
 
 RUN python -m pip install -r requirements.txt --no-cache-dir && \
     python manage.py migrate 
