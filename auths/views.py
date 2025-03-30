@@ -94,3 +94,20 @@ class ProfileView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(request_body=ProfileSerializer, responses={201: ProfileSerializer})
+    def post(self, request, *args, **kwargs):
+        # Check if profile already exists
+        profile = self.get_profile(request.user)
+        if profile:
+            return Response(
+                {"error": "Profile already exists. Use PUT or PATCH to update."}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Create a new profile
+        serializer = self.serializers(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
