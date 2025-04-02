@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 from rest_framework.validators import ValidationError
 from user.models import CustomUser
-from .profile_serializer import ProfileSerializer
+
 
 class LoginSerializer(serializers.ModelSerializer, TokenObtainPairSerializer):
     username_field = "username"
@@ -19,7 +19,7 @@ class LoginSerializer(serializers.ModelSerializer, TokenObtainPairSerializer):
             user = CustomUser.objects.get(username=username)
 
         except CustomUser.DoesNotExist:
-            raise ValidationError({"error":"User does not exist"})
+            raise ValidationError({"error":"Invalid credentials"})
         
         if user.last_login == None:
             user.is_active = True
@@ -71,5 +71,5 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         return True
     
-
-
+class ForgotPassword(serializers.Serializer):
+    pass
