@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt', # for JWT authentication
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
-    # 'members',
 ]
 
 MIDDLEWARE = [
