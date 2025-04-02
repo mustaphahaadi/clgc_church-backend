@@ -1,17 +1,17 @@
 from rest_framework import serializers
-from .models import Member, Contact, Testimony
-from .custom_user_model import CustomUser
-from .profile_model import Profile
+from .models import  Contact, Testimony
+from user.models import CustomUser, Profile
 
-class MemberSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Member
-        fields = '__all__'
-        extra_kwargs = {
-            'middle_name': {'required': False},
-            'office_address': {'required': False},
-            'prayer_request': {'required': False}
-        }
+        
+# class MemberSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Member
+#         fields = '__all__'
+#         extra_kwargs = {
+#             'middle_name': {'required': False},
+#             'office_address': {'required': False},
+#             'prayer_request': {'required': False}
+#         }
 
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
