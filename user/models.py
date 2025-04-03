@@ -12,6 +12,10 @@ class CustomUser(AbstractUser):
     country_code = models.CharField(max_length=5,null=False,blank=False,default="+233")
     gender = models.CharField(max_length=6,choices=GENDER,null=False)
     profile_complete = models.BooleanField(default=False)
+
+    # For otp
+    activation_code = models.CharField(max_length=50,null=True,blank=True)
+    otp_code = models.CharField(max_length=6,null=True,blank=True)
     
     is_active = models.BooleanField(default=False)
 

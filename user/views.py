@@ -6,19 +6,19 @@ from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated
 from .serializers import UserSerializer, ProfileSerializer, FellowshipSerializer
 
 from .models import CustomUser, Profile, Fellowship
 from .permissions import IsAdminOrReadOnly
 
 class FellowViewset(ModelViewSet):
-    permission_classes = (IsAuthenticated,IsAdminOrReadOnly,)
+    permission_classes = (IsAuthenticatedOrReadOnly,IsAdminOrReadOnly,)
     serializer_class = FellowshipSerializer
     queryset = Fellowship.objects.all()
 
 class UserView(ModelViewSet):
-    permission_classes = (IsAuthenticated,IsAdminUser)
+    permission_classes = (IsAdminUser,)
     serializer_class = UserSerializer
     queryset = CustomUser.objects.all()
 
