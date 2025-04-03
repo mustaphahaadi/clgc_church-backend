@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ndcs1po5094k^ltkf+_%(hahgq^iwhlunc%4fp9y42q7u6h7*q'
+SECRET_KEY = config("SECRET_KEY",default=str)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'user',
     'auths',
     'members', 
+    "sermons",
     # 3rd party lib
     'drf_yasg', # for API docs 
     'rest_framework', # for API creation
@@ -170,16 +172,6 @@ AUTH_USER_MODEL = 'user.CustomUser'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Email settings
-# For development, use console backend
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# For production, uncomment and configure these settings
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.your-email-provider.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'your-email@example.com'
-# EMAIL_HOST_PASSWORD = 'your-email-password'
 DEFAULT_FROM_EMAIL = 'noreply@clgc.org'
 ADMIN_EMAIL = 'admin@clgc.org'
 
@@ -219,3 +211,9 @@ REST_FRAMEWORK = {
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_PORT = 587
+EMAIL_HOST_USER = config("EMAIL_HOST_USER",default=str)
+EMAIL_HOST_PASSWORD = 'xfhr dyxi gfey oqnn' # config("EMAIL_HOST_PASSWORD",default=str)
+EMAIL_USE_TLS =config("EMAIL_USE_TLS",default=bool)

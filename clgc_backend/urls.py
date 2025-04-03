@@ -20,9 +20,10 @@ schema = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/members/', include('members.urls')),
+    path("api/",include("user.urls")), 
     path("api/auth/",include("auths.urls")),
-    path("api/",include("user.urls")),  
+    path('api/members/', include('members.urls')),
+    path("api/sermons/",include("sermons.urls")),
     path("swagger/docs",schema.with_ui("swagger",cache_timeout=0),name="swagger-api"),
 ]
 
