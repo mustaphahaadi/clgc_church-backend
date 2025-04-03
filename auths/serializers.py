@@ -70,6 +70,51 @@ class RegisterSerializer(serializers.ModelSerializer):
             **kwargs
         )
         return True
+class OtpSerializer(serializers.Serializer):
+    otp  = serializers.CharField(required=True)
+    email = serializers.CharField(required=True)
+
+    class Meta:
+        fields = [
+            "email",
+            "otp"
+        ]
+
+class ForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    class Meta:
+        fields = [
+            "email"
+        ]
+
+class ResetPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    new_password = serializers.CharField()
+    confirm_password = serializers.CharField()
+    class Meta:
+        fields = [
+            "email","new_password","confirm_password"
+        ]
+        pass
     
-class ForgotPassword(serializers.Serializer):
-    pass
+    def validate(self, attrs):
+        email = attrs.get("email")
+        user = CustomUser.object.get(email=email)
+        new_password = attrs.get("new_password")
+        confirm_password = attrs.get("confirm_password")
+
+        if new_password != confirm_password:
+            return ValidationError("error","passwords do not match")
+        
+        if new_password == user.check_password(new_password):
+            return ValidationError("error","new password must not be same as old password")
+        return super().validate(attrs)
+
+class ResendOtpSerializer(serializers.Serializer):
+    email = serializers.CharField(required=True)
+
+    class Meta:
+        fields = [
+            "email",
+        ]
