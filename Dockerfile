@@ -7,7 +7,7 @@ COPY . .
 RUN apt-get update && apt-get upgrade -y && apt-get install -y gcc python3-dev musl-dev && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir -r requirements.txt 
-RUN python manage.py migrate && python manage.py test && python manage create_user_details
+RUN python manage.py test && python manage.py migrate &&  python manage.py create_user_details
 
 
 # EXPOSE 8000
