@@ -27,12 +27,19 @@ class LoginSerializer(serializers.ModelSerializer, TokenObtainPairSerializer):
 
         
         data = super().validate(attrs)
-        print(attrs)
         refresh = self.get_token(self.user)
 
         data["refresh"] = str(refresh)
         data["access"] = str(refresh.access_token)
-        data['username'] = user.username
+        data['user'] = {
+            "username":user.username,
+            "first_name":user.first_name,
+            "middle_name":user.middle_name,
+            "last_name":user.last_name,
+            "telephone":user.telephone,
+            "profileComplete":user.profile_complete,
+            "email":user.email
+        }
         return data
 
 
@@ -117,4 +124,12 @@ class ResendOtpSerializer(serializers.Serializer):
     class Meta:
         fields = [
             "email",
+        ]
+
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField(required=True)
+
+    class Meta:
+        fields = [
+            "refresh",
         ]

@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from drf_yasg.utils import swagger_auto_schema
 import pyotp
@@ -165,8 +166,21 @@ class ReSendOtp(APIView):
         
         return Response({"error":"Invalid request"},status=status.HTTP_400_BAD_REQUEST)
     
-class LogoutView(TokenBlacklistView):
+class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
+    serializers = LogoutSerializer
 
     def post(self,request,*args,**kwargs):
-        pass
+        # Extract the refresh token from the request
+        serializer = self.serializers(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            try: 
+                # Blacklist the refresh token
+                refresh_token = serializer.validated_data["refresh"]
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+
+                return Response({"message": "Successfully logged out"}, status=200)
+            except Exception as e:
+                return Response({"error": str(e)}, status=400)
+        return Response({"error":"server side error"}, status=500)
