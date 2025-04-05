@@ -15,7 +15,7 @@ schema = get_schema_view(
     ),
     permission_classes=(AllowAny,),
     public=True,
-    # url="https://clgcchurch-backend-production.up.railway.app",
+    url="https://clgcchurch-backend-production.up.railway.app",
 )
 
 urlpatterns = [
