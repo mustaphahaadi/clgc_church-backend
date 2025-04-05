@@ -39,7 +39,7 @@ class ProfileView(APIView):
     def get(self, request,*args, **kwargs):
         profile = self.get_profile(request.user)
         if not profile:
-            return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Profile not complete"}, status=status.HTTP_404_NOT_FOUND)
         
         serializer = self.serializers(profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
