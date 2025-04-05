@@ -26,6 +26,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'username', 'email', 'first_name', 'last_name',
             'date_of_birth', 'house_address', 'digital_address',
+            "martial_status","born_again",
             'occupation', 'church_information', 'profile_image',
             'fellowship', 'created_at', 'updated_at'
         ]
