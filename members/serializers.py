@@ -92,11 +92,11 @@ class TestimonySerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Testimony
-        fields = ['id', 'user', 'user_name', 'category', 'testimony', 'image', 'video', 'created_at']
+        fields = ['id', 'user', 'user_name',"title", 'category', 'content', 'image', 'video', 'created_at']
         read_only_fields = ['user', 'created_at']
         extra_kwargs = {
             'category': {'required': True, 'error_messages': {'required': 'Category is required'}},
-            'testimony': {'required': True, 'error_messages': {'required': 'Testimony content is required'}},
+            'content': {'required': True, 'error_messages': {'required': 'Content content is required'}},
             'image': {'required': False},
             'video': {'required': False}
         }

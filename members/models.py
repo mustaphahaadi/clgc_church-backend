@@ -30,12 +30,13 @@ class Testimony(models.Model):
         return f'testimonies/{username}/{instance.category}/{filename}'
     
     user = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
+    title = models.CharField(max_length=100, null=True,blank=True)
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
-    testimony = models.TextField()
+    content = models.TextField()
     image = models.ImageField(upload_to=testimony_image_path, null=True, blank=True)
     video = models.URLField(null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)  # Changed from auto_now_add to default
-    approved = models.BooleanField(default=False)
+    verified = models.BooleanField(default=False)
     
     def __str__(self):
         return f"{self.category} testimony by {self.user.username if self.user else 'Anonymous'}"

@@ -3,6 +3,9 @@ from user.models import CustomUser
 from django.core.validators import FileExtensionValidator
 from .validators import validate_vdieo_size
 # Create your models here.
+def thumbnail_sermon_directory(instance,filename):
+    return f"sermons/thumbnail/{filename}"
+
 def mp3_sermon_directory(instance,filename):
     return f"sermons/mp3/{filename}"
 
@@ -19,6 +22,12 @@ class Sermon(models.Model):
     video = models.FileField(upload_to=mp4_sermon_directory,null=True,blank=True,validators=[
         FileExtensionValidator(allowed_extensions=["mp4","avi"])
     ])
+    video_link = models.URLField(max_length=100,null=True,blank=True)
+    thumbnail = models.ImageField(upload_to=mp4_sermon_directory,null=True,blank=True,validators=[
+        FileExtensionValidator(allowed_extensions=["png","jpeg","jpg","giff"])
+    ])
+    series = models.CharField(max_length=50,null=True,blank=True)
+    scriptures = models.CharField(max_length=255,null=True,blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
