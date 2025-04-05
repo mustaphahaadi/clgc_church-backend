@@ -53,6 +53,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "username",
+            "gender",
             "telephone",
             "country_code",
             "password",
