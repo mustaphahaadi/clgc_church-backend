@@ -31,10 +31,17 @@ class Fellowship(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class Profile(models.Model):
+    MARTIAL_STATUS = (
+        ("married","Married"),
+        ("single","Single"),
+        ("divorced","Divorced"),
+    )
+
     class Meta:
         app_label = 'members'
     
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='profile')
+    martial_status =  models.CharField(max_length=8,choices=MARTIAL_STATUS,null=True) # ADDED NEW FIELD
     visit_date = models.DateField(auto_now_add=True)
     date_of_birth = models.DateField(null=True, blank=True)
     house_address = models.TextField()
@@ -43,6 +50,7 @@ class Profile(models.Model):
     church_information = models.TextField(blank=True, null=True)
     profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
     fellowship = models.ForeignKey(Fellowship,on_delete=models.SET_NULL,null=True,blank=True)
+    born_again = models.BooleanField(default=False) # ADDED NEW FIELD
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
