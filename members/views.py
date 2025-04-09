@@ -6,11 +6,13 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import MultiPartParser, FormParser
+from drf_yasg.utils import swagger_auto_schema
 
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import *
 from .serializers import *
+from .permissions import IsOwnerOrReadOnly
 
 class CustomPagination(PageNumberPagination):
     page_size = 10
@@ -31,6 +33,32 @@ class TestimonyViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class UserTestimoniesView(APIView):
+    permission_classes= (IsAuthenticated,IsOwnerOrReadOnly)
+    serializers = TestimonySerializer
+
+    def get_testimony(self, username):
+        # Find the user by username
+        try:
+            user = CustomUser.objects.get(username=username)
+        except CustomUser.DoesNotExist:
+            return None
+        # find his/her testimony
+        try:
+            return Testimony.objects.get(user=user)
+        except Profile.DoesNotExist:
+            return None
+
+    @swagger_auto_schema(responses={200:TestimonySerializer})
+    def get(self,request,username,*args,**kwargs):
+        testimony = self.get_testimony(username)
+        if not testimony:
+            return Response([], status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = self.serializers(testimony)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
