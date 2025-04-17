@@ -38,25 +38,20 @@ class UserTestimoniesView(APIView):
     permission_classes= (IsAuthenticated,IsOwnerOrReadOnly)
     serializers = TestimonySerializer
 
-    def get_testimony(self, username):
-        # Find the user by username
-        try:
-            user = CustomUser.objects.get(username=username)
-        except CustomUser.DoesNotExist:
-            return None
+    def get_testimony(self, user):
         # find his/her testimony
         try:
-            return Testimony.objects.get(user=user)
+            return Testimony.objects.filter(user=user)
         except Profile.DoesNotExist:
             return None
 
     @swagger_auto_schema(responses={200:TestimonySerializer})
-    def get(self,request,username,*args,**kwargs):
-        testimony = self.get_testimony(username)
-        if not testimony:
-            return Response([], status=status.HTTP_404_NOT_FOUND)
+    def get(self,request,*args,**kwargs):
+        testimony = self.get_testimony(request.user)
+        if testimony == None:
+            return Response([], status=status.HTTP_200_OK)
         
-        serializer = self.serializers(testimony)
+        serializer = self.serializers(testimony,many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 
