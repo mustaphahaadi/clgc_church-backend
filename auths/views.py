@@ -170,6 +170,7 @@ class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
     serializers = LogoutSerializer
 
+    @swagger_auto_schema(request_body=LogoutSerializer)
     def post(self,request,*args,**kwargs):
         # Extract the refresh token from the request
         serializer = self.serializers(data=request.data)
