@@ -1,6 +1,8 @@
 from django.db import models
 from datetime import timedelta
 from django.utils import timezone
+import django
+
 def event_image_dir(instance,filename):
     return f"media/events/{filename}"
 
@@ -8,8 +10,8 @@ def event_image_dir(instance,filename):
 class Events(models.Model):
     title = models.CharField(max_length=255,null=False)
     location = models.CharField(max_length=255,null=False)
-    date = models.DateField(default=timezone.now())
-    time = models.TimeField(default=timedelta(minutes=5))
+    date = models.DateField(default=django.utils.timezone.now)
+    time = models.TimeField(default="09:01")
     description = models.TextField()
     category = models.CharField(max_length=255,null=False)
     image = models.ImageField(upload_to=event_image_dir,null=True,blank=True)
