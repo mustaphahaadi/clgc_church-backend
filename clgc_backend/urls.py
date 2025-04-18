@@ -25,6 +25,7 @@ urlpatterns = [
     path("api/auth/",include("auths.urls")),
     path('api/members/', include('members.urls')),
     path("api/sermons/",include("sermons.urls")),
+    path("api/prayer_requests/",include("prayer_request.urls")),
     path("swagger/docs/",schema.with_ui("swagger",cache_timeout=0),name="swagger-api"),
 ]
 

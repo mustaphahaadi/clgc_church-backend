@@ -38,7 +38,8 @@ class LoginSerializer(serializers.ModelSerializer, TokenObtainPairSerializer):
             "last_name":user.last_name,
             "telephone":user.telephone,
             "profileComplete":user.profile_complete,
-            "email":user.email
+            "email":user.email,
+            "role":user.role
         }
         return data
 
