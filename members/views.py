@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import *
 from .serializers import *
-from .permissions import IsOwnerOrReadOnly
+from utils.permissions import IsOwnerOrReadOnly
 
 class CustomPagination(PageNumberPagination):
     page_size = 10

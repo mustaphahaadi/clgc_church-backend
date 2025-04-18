@@ -21,10 +21,11 @@ schema = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/",include("user.urls")), 
+    path("api/events/",include("events.urls")), #events endpoints
     path("api/auth/",include("auths.urls")),
     path('api/members/', include('members.urls')),
     path("api/sermons/",include("sermons.urls")),
-    path("swagger/docs",schema.with_ui("swagger",cache_timeout=0),name="swagger-api"),
+    path("swagger/docs/",schema.with_ui("swagger",cache_timeout=0),name="swagger-api"),
 ]
 
 # Serve media files in development

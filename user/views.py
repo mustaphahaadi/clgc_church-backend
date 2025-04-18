@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, I
 from .serializers import UserSerializer, ProfileSerializer, FellowshipSerializer
 
 from .models import CustomUser, Profile, Fellowship
-from .permissions import IsAdminOrReadOnly
+from utils.permissions import IsAdminOrReadOnly
 
 class FellowViewset(ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,IsAdminOrReadOnly,)

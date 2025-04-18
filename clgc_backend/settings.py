@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'auths',
     'members', 
     "sermons",
+    "events",
+    "prayer_request",
+    
     # 3rd party lib
     'drf_yasg', # for API docs 
     'rest_framework', # for API creation
