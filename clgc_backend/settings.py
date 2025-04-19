@@ -175,8 +175,8 @@ AUTH_USER_MODEL = 'user.CustomUser'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-DEFAULT_FROM_EMAIL = 'noreply@clgc.org'
-ADMIN_EMAIL = 'admin@clgc.org'
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default="")
+ADMIN_EMAIL = config("ADMIN_EMAIL", default="")
 
 # REST Framework settings
 REST_FRAMEWORK = {

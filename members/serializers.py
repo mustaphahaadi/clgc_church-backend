@@ -26,10 +26,10 @@ class ContactSerializer(serializers.ModelSerializer):
             'email': {'required': False}
         }
 
-    def validate_phone(self, value):
-        if not value.isdigit():
-            raise serializers.ValidationError('Phone number must contain only digits')
-        return value
+    # def validate_phone(self, value):
+    #     if not value.isdigit():
+    #         raise serializers.ValidationError('Phone number must contain only digits')
+    #     return value
 
     def validate_message(self, value):
         if len(value.strip()) < 10:

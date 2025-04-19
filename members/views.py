@@ -54,6 +54,39 @@ class UserTestimoniesView(APIView):
         serializer = self.serializers(testimony,many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+class ContactUsView(APIView):
+    permission_classes = (AllowAny,)
+    serializer = ContactSerializer
+
+    def post(self,request,*args,**kwargs):
+        serializer = self.serializer(data=request.data)
+        if serializer.is_valid():
+            contact = serializer.save()
+            
+            # Send email notification
+            try:
+                send_mail(
+                    f'New Contact Form Submission: {contact.subject}',
+                    f'Name: {contact.name}\nEmail: {contact.email}\nPhone: {contact.phone}\n\nMessage:\n{contact.message}',
+                    settings.DEFAULT_FROM_EMAIL,
+                    [settings.ADMIN_EMAIL],
+                    fail_silently=True,
+                )
+                
+                # Send confirmation to user if email provided
+                if contact.email:
+                    send_mail(
+                        'Thank you for contacting City of Light Global Church',
+                        'We have received your message and will get back to you soon.',
+                        settings.DEFAULT_FROM_EMAIL,
+                        [contact.email],
+                        fail_silently=True,
+                    )
+            except Exception:
+                return Response({"error":"mail not found"},status=status.HTTP_400_BAD_REQUEST)  # Don't fail if email sending fails
+                
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -87,34 +120,7 @@ def create_testimony(request):
 @permission_classes([AllowAny])
 def create_contact(request):
     if request.method == 'POST':
-        serializer = ContactSerializer(data=request.data)
-        if serializer.is_valid():
-            contact = serializer.save()
-            
-            # Send email notification
-            try:
-                send_mail(
-                    f'New Contact Form Submission: {contact.subject}',
-                    f'Name: {contact.name}\nEmail: {contact.email}\nPhone: {contact.phone}\n\nMessage:\n{contact.message}',
-                    settings.DEFAULT_FROM_EMAIL,
-                    [settings.ADMIN_EMAIL],
-                    fail_silently=True,
-                )
-                
-                # Send confirmation to user if email provided
-                if contact.email:
-                    send_mail(
-                        'Thank you for contacting City of Light Global Church',
-                        'We have received your message and will get back to you soon.',
-                        settings.DEFAULT_FROM_EMAIL,
-                        [contact.email],
-                        fail_silently=True,
-                    )
-            except Exception:
-                pass  # Don't fail if email sending fails
-                
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        pass
 
 
 @api_view(['POST'])

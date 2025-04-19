@@ -6,3 +6,7 @@ class PrayerRequestSerializer(serializers.ModelSerializer):
         model = PrayerRequest
         fields = "__all__"
         read_only_fields = ["author"]
+
+    
+    def save(self, **kwargs):
+        return super().save(**kwargs)
