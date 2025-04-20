@@ -7,7 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, IsAuthenticated
-from .serializers import UserSerializer, ProfileSerializer, FellowshipSerializer
+from .serializers import *
 
 from .models import CustomUser, Profile, Fellowship
 from utils.permissions import IsAdminOrReadOnly
@@ -17,6 +17,30 @@ class FellowViewset(ModelViewSet):
     serializer_class = FellowshipSerializer
     queryset = Fellowship.objects.all()
 
+class JoinFellowShip(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializers = JoinFellowshipSerializer
+
+    @swagger_auto_schema(request_body=JoinFellowshipSerializer)
+    def post(self,request,*args,**kwargs):
+        serializer = self.serializers(data=request.data)
+
+        # Add fellowship to user profile
+        if serializer.is_valid(raise_exception=True):
+            username = serializer.validated_data.get("username")
+            fellowship = serializer.validated_data.get("fellowship")
+            username_object = CustomUser.objects.get(username=username)
+            fellowship_object = Fellowship.objects.get(name=fellowship)
+
+            profile = Profile.objects.get(user=username_object)
+            profile.fellowship = fellowship_object
+            profile.save()
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+    
 class UserView(ModelViewSet):
     permission_classes = (IsAdminUser,)
     serializer_class = UserSerializer
