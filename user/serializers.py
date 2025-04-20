@@ -7,6 +7,40 @@ class FellowshipSerializer(serializers.ModelSerializer):
         model = Fellowship
         fields = "__all__"
 
+class JoinFellowshipSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    fellowship = serializers.CharField()
+
+    class Meta:
+        fields = [
+            "username","fellowship"
+        ]
+    
+    def validate_username(self,value):
+        # check if user exists
+        if CustomUser.objects.filter(username=value).exists():
+            user = CustomUser.objects.get(username=value)
+        else:
+            serializers.ValidationError("user cannot be found")
+            
+
+        # check if user profile exists
+        try:
+            if Profile.objects.filter(user=user).exists():
+                return value
+        except:
+            serializers.ValidationError("profile cannot be found")
+        
+
+    def validate_fellowship(self,value):
+        try:
+            if Fellowship.objects.filter(name=value):
+                return value;
+        except:
+            serializers.ValidationError("fellowship cannot be found")
+
+        
+    
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
