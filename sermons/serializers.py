@@ -6,6 +6,7 @@ class SermonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sermon
         fields = [
+            "id",
             "title","description",
             "speaker","mp3",
             "video","user_name",

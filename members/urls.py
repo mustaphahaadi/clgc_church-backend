@@ -8,7 +8,8 @@ router.register(r'testimonies', views.TestimonyViewSet)
 
 urlpatterns = [
     # Contact form endpoint
-    path('contacts/', views.create_contact, name='create_contact'),
+    path('contacts/', views.ContactUsView.as_view(), name='create_contact'),
+    path("my/testimonies/",views.UserTestimoniesView.as_view(),name="my-testimonies"),
 
     
     # Include router URLs

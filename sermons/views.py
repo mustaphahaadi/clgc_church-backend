@@ -4,7 +4,7 @@ from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 
 from .models import Sermon
 from .serializers import SermonSerializer
-from .permissions import IsAdminOrReadOnly
+from utils.permissions import IsAdminOrReadOnly
 
 class SermonViewset(ModelViewSet):
     parser_classes = (MultiPartParser,FormParser)

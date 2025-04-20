@@ -7,12 +7,20 @@ class CustomUser(AbstractUser):
         ("female","Female"),
     )
 
+    ROLE = (
+        ("admin","Admin"),
+        ("leader","Leader"),
+        ("media","Media"),
+        ("user","User"),
+    )
+
     middle_name = models.CharField(max_length=25,null=True,blank=True)
     telephone = models.CharField(max_length=12,null=False)
     country_code = models.CharField(max_length=5,null=False,blank=False,default="+233")
     gender = models.CharField(max_length=6,choices=GENDER,null=False)
     profile_complete = models.BooleanField(default=False)
 
+    role = models.CharField(max_length=20,choices=ROLE,default="user")
     # For otp
     activation_code = models.CharField(max_length=50,null=True,blank=True)
     otp_code = models.CharField(max_length=6,null=True,blank=True)

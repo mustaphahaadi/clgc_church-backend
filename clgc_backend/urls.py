@@ -15,16 +15,18 @@ schema = get_schema_view(
     ),
     permission_classes=(AllowAny,),
     public=True,
-    url="https://clgcchurch-backend-production.up.railway.app",
+    # url="https://clgcchurch-backend-production.up.railway.app",
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/",include("user.urls")), 
+    path("api/events/",include("events.urls")), #events endpoints
     path("api/auth/",include("auths.urls")),
     path('api/members/', include('members.urls')),
     path("api/sermons/",include("sermons.urls")),
-    path("swagger/docs",schema.with_ui("swagger",cache_timeout=0),name="swagger-api"),
+    path("api/prayer_requests/",include("prayer_request.urls")),
+    path("swagger/docs/",schema.with_ui("swagger",cache_timeout=0),name="swagger-api"),
 ]
 
 # Serve media files in development

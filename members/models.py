@@ -21,6 +21,7 @@ class Testimony(models.Model):
         ('salvation', 'Salvation'),
         ('deliverance', 'Deliverance'),
         ('provision', 'Provision'),
+        ('breakthrough', 'breakthrough'),
         ('other', 'Other')
     ]
     
