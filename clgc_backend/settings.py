@@ -29,7 +29,7 @@ DEBUG = config("SECRET_KEY",cast=str)
 # APPEND_SLASH = True 
 
 
-ALLOWED_HOSTS = ["cityoflightglobalchurch.org"]
+ALLOWED_HOSTS = ["cityoflightglobalchurch.org/backend"]
 
 
 # Application definition
