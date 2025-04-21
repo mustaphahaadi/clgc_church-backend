@@ -22,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY",default=str)
+SECRET_KEY = config("SECRET_KEY",cast=str)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("SECRET_KEY",cast=str)
 # APPEND_SLASH = True 
 
 
@@ -100,13 +100,35 @@ WSGI_APPLICATION = 'clgc_backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+BACKEND_ENV = config("ENV")
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if BACKEND_ENV == "dev":
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'mysql.connector.django',
+            'NAME': config("DB_NAME",cast=str),
+            'HOST': config("DB_HOST",cast=str),
+            'USER': config("DB_USER",cast=str),
+            "PASSWORD":config("DB_PASSWORD",cast=str),
+            "PORT":config("DB_PORT",cast=int),
+            "OPTIONS":{
+                'charset': 'utf8mb4',
+                "collation":"utf8mb4_unicode_ci",
+                "use_pure":True,
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+                # 'autocommit': True,
+                # 'use_oure': True,
+                # 'init_command': "SET foo='bar';"
+            },
+        },
+    }
 
 # SWAGGER SETTINGS
 SWAGGER_SETTINGS = {
