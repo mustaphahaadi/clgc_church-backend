@@ -29,7 +29,7 @@ DEBUG = True
 # APPEND_SLASH = True 
 
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["cityoflightglobalchurch.org"]
 
 
 # Application definition
@@ -73,7 +73,7 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 # CSRF_TRUSTED_ORIGINS = [
-#     "http://localhost:5173",
+#     "https://cityoflightglobalchurch.org",
 # ]
 
 
