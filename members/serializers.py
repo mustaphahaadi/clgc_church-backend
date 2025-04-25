@@ -62,30 +62,6 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Phone number must contain only digits')
         return value
 
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ['id', 'user', 'visit_date', 'date_of_birth', 'house_address', 
-                 'digital_address', 'occupation', 'church_information', 
-                 'profile_image', 'fellowship', 'created_at', 'updated_at']
-        read_only_fields = ['user', 'visit_date', 'created_at', 'updated_at']
-        extra_kwargs = {
-            'date_of_birth': {'required': True, 'error_messages': {'required': 'Date of birth is required'}},
-            'house_address': {'required': True, 'error_messages': {'required': 'House address is required'}},
-            'occupation': {'required': True, 'error_messages': {'required': 'Occupation is required'}},
-            'digital_address': {'required': False},
-            'church_information': {'required': False},
-            'profile_image': {'required': False},
-            'fellowship': {'required': False}
-        }
-
-    def validate_date_of_birth(self, value):
-        from datetime import date
-        today = date.today()
-        age = today.year - value.year - ((today.month, today.day) < (value.month, value.day))
-        if age < 13:
-            raise serializers.ValidationError('You must be at least 13 years old')
-        return value
 
 class TestimonySerializer(serializers.ModelSerializer):
     user_name = serializers.SerializerMethodField()
