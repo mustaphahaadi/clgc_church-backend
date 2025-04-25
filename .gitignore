@@ -5,3 +5,4 @@ media
 **/__pycache__
 **/migrations/__pycache__
 **/management/commands/__pycache__
+**/migrations/**.py
