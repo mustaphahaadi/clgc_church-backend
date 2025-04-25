@@ -10,7 +10,7 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, I
 from .serializers import *
 
 from .models import CustomUser, Profile, Fellowship
-from utils.permissions import IsAdminOrReadOnly
+from utils.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 
 class FellowViewset(ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,IsAdminOrReadOnly,)
@@ -47,6 +47,25 @@ class UserView(ModelViewSet):
     queryset = CustomUser.objects.all()
 
 
+class UpdateUserDetailView(APIView):
+    permission_classes = (IsOwnerOrReadOnly,)
+    serializer_class = UserSerializer
+    queryset = CustomUser.objects.all()
+    def get_user(self,username):
+        try:
+            return CustomUser.objects.get(username=username)
+        except CustomUser.DoesNotExist:
+            return None
+    @swagger_auto_schema(request_body=UserSerializer, responses={200: ProfileSerializer})
+    def patch(self, request,username, *args, **kwargs):
+        user = self.get_user(username=username)
+        if user != None:
+            serializer = self.serializer_class(user,data=request.data,partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data,status=status.HTTP_201_CREATED)
+
+        return Response({"error":"User cannot be found"},status=status.HTTP_400_BAD_REQUEST)
 
 class ProfileView(APIView):
     permission_classes = (IsAuthenticated,)
@@ -59,13 +78,21 @@ class ProfileView(APIView):
         except Profile.DoesNotExist:
             return None
     
+    def get_fellowship(self,fellowship):
+        try:
+            return Fellowship.objects.get(id=fellowship)
+        except Fellowship.DoesNotExist:
+            return None
+        
     @swagger_auto_schema(responses={200: ProfileSerializer})
     def get(self, request,*args, **kwargs):
         profile = self.get_profile(request.user)
         if not profile:
             return Response({"error": "Profile not complete"}, status=status.HTTP_404_NOT_FOUND)
         
+        fellowship = self.get_fellowship(fellowship=profile.fellowship.id)
         serializer = self.serializers(profile)
+        # serializer.data["fellowships"] = fellowship
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     @swagger_auto_schema(request_body=ProfileSerializer, responses={200: ProfileSerializer})
