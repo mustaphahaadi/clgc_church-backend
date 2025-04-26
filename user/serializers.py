@@ -3,10 +3,15 @@ from rest_framework import serializers
 from .models import CustomUser, Profile,Fellowship
 
 class FellowshipSerializer(serializers.ModelSerializer):
+    leader_name = serializers.SerializerMethodField()
     class Meta:
         model = Fellowship
         fields = "__all__"
+        read_only_fields = ["leader_name"]
 
+    def get_leader_name(self,obj):
+        return obj.leader.username if obj.leader else None
+    
 class JoinFellowshipSerializer(serializers.Serializer):
     username = serializers.CharField()
     fellowship = serializers.CharField()
@@ -42,18 +47,23 @@ class JoinFellowshipSerializer(serializers.Serializer):
         
     
 class UserSerializer(serializers.ModelSerializer):
+    profileComplete = serializers.SerializerMethodField()
     class Meta:
         model = CustomUser
         fields = [
-            "username","email","first_name","middle_name",
+            "username","email","first_name","middle_name","last_name","telephone","profileComplete","role",
             "last_login","gender"
         ]
+
+    def get_profileComplete(self,obj):
+        return obj.profile_complete
 
 class ProfileSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()
     first_name = serializers.SerializerMethodField()
     last_name = serializers.SerializerMethodField()
+    fellowship_name = serializers.SerializerMethodField()
     
     class Meta:
         model = Profile
@@ -62,9 +72,19 @@ class ProfileSerializer(serializers.ModelSerializer):
             'date_of_birth', 'house_address', 'digital_address',
             "martial_status","born_again",
             'occupation', 'church_information', 'profile_image',
-            'fellowship', 'created_at', 'updated_at'
+            'fellowship', 'created_at', 'updated_at',"fellowship_name"
         ]
-        read_only_fields = ['id', 'username', 'email', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'username', 'email', 'created_at', 'updated_at',"fellowship_name"]
+
+        extra_kwargs = {
+            'date_of_birth': {'required': True, 'error_messages': {'required': 'Date of birth is required'}},
+            'house_address': {'required': True, 'error_messages': {'required': 'House address is required'}},
+            'occupation': {'required': True, 'error_messages': {'required': 'Occupation is required'}},
+            'digital_address': {'required': False},
+            'church_information': {'required': False},
+            'profile_image': {'required': False},
+            'fellowship': {'required': False}
+        }
     
     def get_username(self, obj):
         return obj.user.username if obj.user else None
@@ -77,6 +97,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     
     def get_last_name(self, obj):
         return obj.user.last_name if obj.user else None
+    
+    def get_fellowship_name(self, obj):
+        return obj.fellowship.name if obj.fellowship else None
     
     def validate_date_of_birth(self, value):
         from datetime import date

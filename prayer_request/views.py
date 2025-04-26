@@ -51,11 +51,13 @@ class CreatePrayerRequests(APIView):
     def post(self,request,*args,**kwargs):
         serializer = self.serializers(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            data = PrayerRequest(
+            data = PrayerRequest.objects.create(
+                title=serializer.validated_data.get("title"),
+                description=serializer.validated_data.get("description"),
+                isPrivate=serializer.validated_data.get("isPrivate"),
                 author=request.user
             )
-            data.save(**serializer.validated_data)
 
-            return Response({"success":"Prayer Request created successfully"},status=200)
+            return Response(serializer.data,status=200)
         return Response({"error":"Prayer Request created failed"},status=500)
 

@@ -9,10 +9,10 @@ class IsOwnerOrReadOnly(BasePermission):
     
     def has_object_permission(self, request, view, obj):
         return bool(
-            request.method in SAFE_METHODS or
+            obj.email == request.user.email or
             obj.user == request.user or
             obj.author == request.user or 
-            request.user.is_superuser
+            request.user.is_superuser 
         )
     
 
@@ -34,5 +34,5 @@ class IsAdminOrSuperuser(BasePermission):
         return bool(
             request.user.is_superuser or
             request.user.is_staff or
-            request.user.role in ["admin","media"]
+            obj.role == "admin"
         ) 
