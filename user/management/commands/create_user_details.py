@@ -25,7 +25,8 @@ class Command(BaseCommand):
                         email=email,
                         first_name = first_name,
                         last_name = last_name,
-                        password = password
+                        password = password,
+                        is_active=True
                     )
                 else:
                     user1 = CustomUser.objects.create_user(
@@ -33,6 +34,7 @@ class Command(BaseCommand):
                         email=email,
                         first_name = first_name,
                         last_name = last_name,
+                        is_active=True,
                         password = password
                     )
                 self.stdout.write(self.style.SUCCESS(f"{email} successfully created"))
