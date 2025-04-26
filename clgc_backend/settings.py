@@ -122,7 +122,8 @@ else:
                 'charset': 'utf8mb4',
                 "collation":"utf8mb4_unicode_ci",
                 "use_pure":True,
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+		'raise_on_warnings': True,
                 # 'autocommit': True,
                 # 'use_oure': True,
                 # 'init_command': "SET foo='bar';"
