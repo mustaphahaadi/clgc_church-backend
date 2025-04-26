@@ -10,13 +10,42 @@ from rest_framework.permissions import IsAdminUser, IsAuthenticatedOrReadOnly, I
 from .serializers import *
 
 from .models import CustomUser, Profile, Fellowship
-from utils.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
+from utils.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly,IsAdminOrSuperuser
 
 class FellowViewset(ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,IsAdminOrReadOnly,)
     serializer_class = FellowshipSerializer
     queryset = Fellowship.objects.all()
 
+class GetMyFellowship(APIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_clas = FellowshipSerializer
+
+    def get_profile(self,user):
+        try:
+            return Profile.objects.get(user=user)
+        except Profile.DoesNotExist:
+            return None
+
+    def get_fellowship(self,id):
+        try:
+            return Fellowship.objects.get(id=id)
+        except Fellowship.DoesNotExist:
+            return None
+        
+    def get(self,request,*args,**kwargs):
+        profile = self.get_profile(request.user)
+
+        if profile == None:
+            return Response({"error":"profile not found"},status=status.HTTP_400_BAD_REQUEST)
+        
+        fellowship = self.get_fellowship(profile.fellowship.id)
+        if fellowship == None:
+            return Response({"error":"fellowship cannot be found"},status=status.HTTP_400_BAD_REQUEST)
+        
+        data = FellowshipSerializer(fellowship).data
+        return Response(data,status=status.HTTP_200_OK)
+        
 class JoinFellowShip(APIView):
     permission_classes = (IsAuthenticated,)
     serializers = JoinFellowshipSerializer
@@ -42,7 +71,7 @@ class JoinFellowShip(APIView):
         
     
 class UserView(ModelViewSet):
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminOrSuperuser,)
     serializer_class = UserSerializer
     queryset = CustomUser.objects.all()
 

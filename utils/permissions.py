@@ -34,5 +34,5 @@ class IsAdminOrSuperuser(BasePermission):
         return bool(
             request.user.is_superuser or
             request.user.is_staff or
-            request.user.role in ["admin","media"]
+            obj.role == "admin"
         ) 

@@ -3,10 +3,15 @@ from rest_framework import serializers
 from .models import CustomUser, Profile,Fellowship
 
 class FellowshipSerializer(serializers.ModelSerializer):
+    leader_name = serializers.SerializerMethodField()
     class Meta:
         model = Fellowship
         fields = "__all__"
+        read_only_fields = ["leader_name"]
 
+    def get_leader_name(self,obj):
+        return obj.leader.username if obj.leader else None
+    
 class JoinFellowshipSerializer(serializers.Serializer):
     username = serializers.CharField()
     fellowship = serializers.CharField()
