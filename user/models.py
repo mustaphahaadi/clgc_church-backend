@@ -34,9 +34,13 @@ class Fellowship(models.Model):
     name = models.CharField(max_length=50,null=False,blank=False,unique=True)
     description = models.TextField()
     leader = models.ForeignKey(CustomUser,on_delete=models.SET_NULL,null=True,blank=True)
+    assistant_leader = models.ForeignKey(CustomUser,on_delete=models.SET_NULL,null=True,blank=True,related_name="assistant_leader")
     # activities = models.ForeignKey()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
 
 class Profile(models.Model):
     MARTIAL_STATUS = (

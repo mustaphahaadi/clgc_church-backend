@@ -12,6 +12,18 @@ class FellowshipSerializer(serializers.ModelSerializer):
     def get_leader_name(self,obj):
         return obj.leader.username if obj.leader else None
     
+    def save(self, **kwargs):
+        # fetch user
+        valid_user = self.validated_data.get("leader")
+        if valid_user != None:
+            user = CustomUser.objects.get(id=valid_user.id)
+
+            # modify role to leader
+            user.role = "leader"
+            user.save()
+
+        return super().save(**kwargs)
+    
 class JoinFellowshipSerializer(serializers.Serializer):
     username = serializers.CharField()
     fellowship = serializers.CharField()
